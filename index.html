@@ -17,21 +17,11 @@
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prevent scrollbars */
         }
         a-scene {
             width: 100vw;
             height: 100vh;
             display: block;
-        }
-        .page-buttons {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 1;
-        }
-        .page-buttons button {
-            margin-right: 10px;
         }
     </style>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -87,100 +77,65 @@
         // Ensure skybox persists
         AFRAME.registerSystem('persistentSkybox', {
             init: function () {
-                const skybox1 = document.querySelector('#skybox1');
-                const skybox2 = document.querySelector('#skybox2');
-                if (skybox1) {
-                    skybox1.addEventListener('loaded', () => {
-                        this.skybox1 = skybox1;
-                    });
-                }
-                if (skybox2) {
-                    skybox2.addEventListener('loaded', () => {
-                        this.skybox2 = skybox2;
+                const skybox = document.querySelector('a-sky');
+                if (skybox) {
+                    skybox.addEventListener('loaded', () => {
+                        this.skybox = skybox;
                     });
                 }
             },
 
             tick: function () {
-                if (this.skybox1) {
-                    this.skybox1.setAttribute('visible', this.activeSkybox === 'skybox1');
+                if (this.skybox) {
+                    // Ensure skybox is rendered properly
+                    this.skybox.setAttribute('visible', true);
                 }
-                if (this.skybox2) {
-                    this.skybox2.setAttribute('visible', this.activeSkybox === 'skybox2');
-                }
-            },
-
-            setSkybox: function (skyboxId) {
-                this.activeSkybox = skyboxId;
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const scene = document.createElement('a-scene');
-            scene.setAttribute('persistent-skybox', '');
-
-            // Add the skybox1
-            const skybox1 = document.createElement('a-sky');
-            skybox1.setAttribute('id', 'skybox1');
-            skybox1.setAttribute('src', 'assets/skybox1.jpg');
-            skybox1.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
-            scene.appendChild(skybox1);
-
-            // Add the skybox2
-            const skybox2 = document.createElement('a-sky');
-            skybox2.setAttribute('id', 'skybox2');
-            skybox2.setAttribute('src', 'assets/skybox2.jpeg');
-            skybox2.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
-            skybox2.setAttribute('visible', 'false'); // Initially hidden
-            scene.appendChild(skybox2);
-
-            // Add a draggable sphere for debugging with smaller size
-            const sphere = document.createElement('a-sphere');
-            sphere.setAttribute('position', '0 1.25 -3');
-            sphere.setAttribute('radius', '0.01'); // Smaller radius
-            sphere.setAttribute('color', '#FF0000');
-            sphere.setAttribute('draggable', ''); // Make sphere draggable
-            scene.appendChild(sphere);
-
-            // Add the camera rig with teleportation controls
-            const cameraRig = document.createElement('a-entity');
-            cameraRig.setAttribute('id', 'cameraRig');
-
-            const camera = document.createElement('a-camera');
-            camera.setAttribute('id', 'camera');
-            cameraRig.appendChild(camera);
-
-            const teleportEntity = document.createElement('a-entity');
-            teleportEntity.setAttribute('teleport', '');
-            cameraRig.appendChild(teleportEntity);
-
-            scene.appendChild(cameraRig);
-
-            // Add page buttons
-            const buttonsContainer = document.createElement('div');
-            buttonsContainer.className = 'page-buttons';
-
-            const button1 = document.createElement('button');
-            button1.textContent = 'Skybox 1';
-            button1.addEventListener('click', () => {
-                scene.systems['persistent-skybox'].setSkybox('skybox1');
-            });
-
-            const button2 = document.createElement('button');
-            button2.textContent = 'Skybox 2';
-            button2.addEventListener('click', () => {
-                scene.systems['persistent-skybox'].setSkybox('skybox2');
-            });
-
-            buttonsContainer.appendChild(button1);
-            buttonsContainer.appendChild(button2);
-            document.body.appendChild(buttonsContainer);
-
-            document.body.appendChild(scene);
         });
     </script>
 </head>
 <body>
     <script src="./libs/fas.js"></script>
+    <script type="module">
+        import { App } from './app.js';
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const app = new App();
+            window.app = app;
+            
+            // Create and append the A-Frame scene dynamically
+            const scene = document.createElement('a-scene');
+            
+            // Add the skybox
+            const sky = document.createElement('a-sky');
+            sky.setAttribute('src', 'assets/skybox.jpg');
+            sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
+            scene.appendChild(sky);
+            
+            // Add a draggable sphere for debugging with smaller size
+            const sphere = document.createElement('a-sphere');
+            sphere.setAttribute('position', '0 1.25 -3');
+            sphere.setAttribute('radius', '0.5'); // Smaller radius
+            sphere.setAttribute('color', '#FF0000');
+            sphere.setAttribute('draggable', ''); // Make sphere draggable
+            scene.appendChild(sphere);
+            
+            // Add the camera rig with teleportation controls
+            const cameraRig = document.createElement('a-entity');
+            cameraRig.setAttribute('id', 'cameraRig');
+            
+            const camera = document.createElement('a-camera');
+            camera.setAttribute('id', 'camera');
+            cameraRig.appendChild(camera);
+            
+            const teleportEntity = document.createElement('a-entity');
+            teleportEntity.setAttribute('teleport', '');
+            cameraRig.appendChild(teleportEntity);
+            
+            scene.appendChild(cameraRig);
+            
+            document.body.appendChild(scene);
+        });
+    </script>
 </body>
 </html>
