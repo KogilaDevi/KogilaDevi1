@@ -40,6 +40,34 @@
                 });
             }
         });
+
+        // Custom draggable component
+        AFRAME.registerComponent('draggable', {
+            init: function () {
+                this.el.addEventListener('mousedown', (event) => {
+                    this.dragging = true;
+                    this.previousMousePosition = event.detail.intersection.point;
+                });
+
+                this.el.sceneEl.addEventListener('mousemove', (event) => {
+                    if (this.dragging) {
+                        const newPosition = event.detail.intersection.point;
+                        const deltaX = newPosition.x - this.previousMousePosition.x;
+                        const deltaY = newPosition.y - this.previousMousePosition.y;
+                        const deltaZ = newPosition.z - this.previousMousePosition.z;
+                        
+                        const currentPosition = this.el.object3D.position;
+                        this.el.object3D.position.set(currentPosition.x + deltaX, currentPosition.y + deltaY, currentPosition.z + deltaZ);
+                        
+                        this.previousMousePosition = newPosition;
+                    }
+                });
+
+                this.el.addEventListener('mouseup', () => {
+                    this.dragging = false;
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -60,11 +88,12 @@
             sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
             scene.appendChild(sky);
             
-            // Add a sphere for debugging
+            // Add a draggable sphere for debugging
             const sphere = document.createElement('a-sphere');
-            sphere.setAttribute('position', '0 0.2 -3');
-            sphere.setAttribute('radius', '0.2');
+            sphere.setAttribute('position', '0 1.25 -3');
+            sphere.setAttribute('radius', '1.25');
             sphere.setAttribute('color', '#FF0000');
+            sphere.setAttribute('draggable', ''); // Make sphere draggable
             scene.appendChild(sphere);
             
             // Add the camera rig with teleportation controls
@@ -86,3 +115,4 @@
     </script>
 </body>
 </html>
+
