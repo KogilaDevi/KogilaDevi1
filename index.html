@@ -74,22 +74,17 @@
             }
         });
 
-        // Ensure skybox persists
-        AFRAME.registerSystem('persistentSkybox', {
+        AFRAME.registerComponent('skybox-loader', {
             init: function () {
                 const skybox = document.querySelector('a-sky');
-                if (skybox) {
-                    skybox.addEventListener('loaded', () => {
-                        this.skybox = skybox;
-                    });
-                }
-            },
-
-            tick: function () {
-                if (this.skybox) {
-                    // Ensure skybox is rendered properly
-                    this.skybox.setAttribute('visible', true);
-                }
+                skybox.addEventListener('materialtextureloaded', () => {
+                    console.log('Skybox texture loaded successfully.');
+                    skybox.setAttribute('visible', true);
+                });
+                skybox.addEventListener('load', () => {
+                    console.log('Skybox loaded successfully.');
+                    skybox.setAttribute('visible', true);
+                });
             }
         });
     </script>
@@ -110,6 +105,7 @@
             const sky = document.createElement('a-sky');
             sky.setAttribute('src', 'assets/skybox.jpg');
             sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
+            sky.setAttribute('skybox-loader', ''); // Ensure skybox loader is attached
             scene.appendChild(sky);
             
             // Add a draggable sphere for debugging with smaller size
@@ -139,4 +135,5 @@
     </script>
 </body>
 </html>
+
 
