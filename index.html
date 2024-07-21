@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>VR Architectural Walkthrough with WebXR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./css/favicon/favicon-16x16.png">
-    <link rel="manifest" href="./css/favicon/site.webmanifest">
-    <link rel="mask-icon" href="./css/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-    <!-- end favicon -->
-    <link type="text/css" rel="stylesheet" href="./css/common.css">
-    <style>
-        body{
-            margin: 0;
-            padding: 0;
+  <head>
+    <meta charset="utf-8">
+    <title>VR Architectural Walkthrough with WebXR</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
+    <script>
+      AFRAME.registerComponent('teleport', {
+        init: function () {
+          this.el.setAttribute('teleport-controls', {
+            startEvents: 'mousedown',
+            endEvents: 'mouseup',
+            cameraRig: '#cameraRig',
+            teleportOrigin: '#camera',
+          });
         }
-    </style>
-</head>
-<body>
-    <script src="./libs/fas.js"></script>
-	<script type="module">
-        import { App } from './app.js';
-        
-		document.addEventListener("DOMContentLoaded", function(){
-			const app = new App();
-			window.app = app;
-		});
-	</script>
-</body>
+      });
+
+      AFRAME.registerComponent('interactable', {
+        init: function () {
+          this.el.addEventListener('click', function () {
+            alert('Object Clicked!');
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene>
+      <a-sky src="assets/sky_box.jpg"></a-sky>
+      <a-entity id="cameraRig">
+        <a-camera id="camera"></a-camera>
+        <a-entity teleport></a-entity>
+      </a-entity>
+      <a-entity geometry="primitive: box" material="color: red" position="0 1 -3" interactable></a-entity>
+      <a-entity geometry="primitive: sphere" material="color: blue" position="2 1 -3"></a-entity>
+    </a-scene>
+  </body>
 </html>
+
+	
