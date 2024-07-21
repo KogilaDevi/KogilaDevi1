@@ -51,15 +51,15 @@
             const app = new App();
             window.app = app;
             
-        
+            // Create and append the A-Frame scene dynamically
             const scene = document.createElement('a-scene');
             
-    
+            // Add the skybox
             const sky = document.createElement('a-sky');
             sky.setAttribute('src', 'assets/skybox.jpg');
             scene.appendChild(sky);
             
-        
+            // Add the camera rig with teleportation controls
             const cameraRig = document.createElement('a-entity');
             cameraRig.setAttribute('id', 'cameraRig');
             
@@ -73,9 +73,9 @@
             
             scene.appendChild(cameraRig);
             
-            
             document.body.appendChild(scene);
         });
     </script>
 </body>
 </html>
+
