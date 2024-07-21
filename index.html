@@ -10,7 +10,10 @@
 <body>
   <a-scene>
     <!-- Add the 360 image skybox -->
-    <a-sky src="path/to/your/image.jpg"></a-sky>
+    <a-assets>
+      <img id="skybox-image" src="assets/skybox.jpg">
+    </a-assets>
+    <a-sky src="#skybox-image"></a-sky>
 
     <!-- Add the architectural model -->
     <a-entity gltf-model="url(https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF/Duck.gltf)" 
