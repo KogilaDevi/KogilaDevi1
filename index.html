@@ -11,16 +11,12 @@
     <link rel="mask-icon" href="./css/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
+    <!-- end favicon -->
     <link type="text/css" rel="stylesheet" href="./css/common.css">
     <style>
         body {
             margin: 0;
             padding: 0;
-        }
-        a-scene {
-            width: 100vw;
-            height: 100vh;
-            display: block;
         }
     </style>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
@@ -45,6 +41,7 @@
             }
         });
 
+        // Custom draggable component
         AFRAME.registerComponent('draggable', {
             init: function () {
                 this.el.addEventListener('mousedown', (event) => {
@@ -71,25 +68,6 @@
                 });
             }
         });
-
-        // Ensure skybox persists
-        AFRAME.registerSystem('persistentSkybox', {
-            init: function () {
-                const skybox = document.querySelector('a-sky');
-                if (skybox) {
-                    skybox.addEventListener('loaded', () => {
-                        this.skybox = skybox;
-                    });
-                }
-            },
-
-            tick: function () {
-                if (this.skybox) {
-                    // Ensure skybox is rendered properly
-                    this.skybox.setAttribute('visible', true);
-                }
-            }
-        });
     </script>
 </head>
 <body>
@@ -101,21 +79,24 @@
             const app = new App();
             window.app = app;
             
+            // Create and append the A-Frame scene dynamically
             const scene = document.createElement('a-scene');
             
-            // Add the 360-degree skybox
+            // Add the skybox
             const sky = document.createElement('a-sky');
-            sky.setAttribute('src', 'assets/skybox.jpg'); // Replace with your 360-degree image path
-            sky.setAttribute('rotation', '0 0 0'); // Ensure no rotation
+            sky.setAttribute('src', 'assets/skybox.jpg');
+            sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
             scene.appendChild(sky);
             
+            // Add a draggable sphere for debugging with smaller size
             const sphere = document.createElement('a-sphere');
             sphere.setAttribute('position', '0 1.25 -3');
-            sphere.setAttribute('radius', '0.5');
+            sphere.setAttribute('radius', '0.5'); // Smaller radius
             sphere.setAttribute('color', '#FF0000');
-            sphere.setAttribute('draggable', '');
+            sphere.setAttribute('draggable', ''); // Make sphere draggable
             scene.appendChild(sphere);
             
+            // Add the camera rig with teleportation controls
             const cameraRig = document.createElement('a-entity');
             cameraRig.setAttribute('id', 'cameraRig');
             
