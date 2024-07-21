@@ -57,6 +57,10 @@
             // Add the skybox
             const sky = document.createElement('a-sky');
             sky.setAttribute('src', 'assets/sky_box.jpg');
+            
+            // Optional: Add a fallback color in case the image fails to load
+            sky.setAttribute('color', '#000000');
+            
             scene.appendChild(sky);
             
             // Add the camera rig with teleportation controls
