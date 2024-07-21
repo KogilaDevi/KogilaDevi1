@@ -20,7 +20,21 @@
 <body>
     <a-scene>
         <!-- Skybox -->
-        <a-sky src="assets/skybox.jpg" rotation="0 -90 0"></a-sky>
+        <a-sky id="dynamic-skybox" src="assets/skybox.jpg" rotation="0 0 0"></a-sky>
     </a-scene>
+
+    <script>
+        document.addEventListener('mousemove', function(event) {
+            // Get the skybox element
+            const skybox = document.querySelector('#dynamic-skybox');
+
+            // Calculate rotation values
+            const rotationX = (event.clientY / window.innerHeight) * 180 - 90;
+            const rotationY = (event.clientX / window.innerWidth) * 360;
+
+            // Update the skybox rotation
+            skybox.setAttribute('rotation', `${rotationX} ${rotationY} 0`);
+        });
+    </script>
 </body>
 </html>
