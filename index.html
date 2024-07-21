@@ -60,12 +60,6 @@
             sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
             scene.appendChild(sky);
             
-            // Add a sphere for debugging
-            const sphere = document.createElement('a-sphere');
-            sphere.setAttribute('position', '0 1.25 -3');
-            sphere.setAttribute('radius', '1.25');
-            sphere.setAttribute('color', '#FF0000');
-            scene.appendChild(sphere);
             
             // Add the camera rig with teleportation controls
             const cameraRig = document.createElement('a-entity');
