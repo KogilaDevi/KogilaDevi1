@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
     <meta charset="utf-8">
     <title>VR Architectural Walkthrough with WebXR</title>
+=======
+	<title>VR Architectural Walkthrough with WebXR</title>
+>>>>>>> parent of 68065d3 (Added teleportation controls and interactive objects)
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png">
@@ -14,11 +18,16 @@
     <!-- end favicon -->
     <link type="text/css" rel="stylesheet" href="./css/common.css">
     <style>
+<<<<<<< HEAD
         body {
+=======
+        body{
+>>>>>>> parent of 68065d3 (Added teleportation controls and interactive objects)
             margin: 0;
             padding: 0;
         }
     </style>
+<<<<<<< HEAD
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
     <script>
@@ -90,5 +99,18 @@
             document.body.appendChild(scene);
         });
     </script>
+=======
+</head>
+<body>
+    <script src="./libs/fas.js"></script>
+	<script type="module">
+        import { App } from './app.js';
+        
+		document.addEventListener("DOMContentLoaded", function(){
+			const app = new App();
+			window.app = app;
+		});
+	</script>
+>>>>>>> parent of 68065d3 (Added teleportation controls and interactive objects)
 </body>
 </html>
