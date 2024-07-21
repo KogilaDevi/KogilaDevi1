@@ -18,7 +18,7 @@
         document.body.appendChild(renderer.domElement);
 
         const loader = new THREE.TextureLoader();
-        loader.load('images/skybox.jpg', function(texture) {
+        loader.load('assets/sky_box.jpg', function(texture) {
             texture.mapping = THREE.EquirectangularReflectionMapping;
             scene.background = texture; // Set the background
         });
