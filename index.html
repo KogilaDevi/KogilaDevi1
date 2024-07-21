@@ -16,9 +16,9 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #e0f7fa; /* Change background color here */
+            background-color: #6a1b9a; /* Change background color to purple */
             font-family: Arial, sans-serif;
-            color: #333;
+            color: #fff; /* Text color for better visibility against purple */
             text-align: center;
             padding-top: 50px;
         }
@@ -29,15 +29,15 @@
             display: inline-block;
             padding: 10px 20px;
             font-size: 1.2em;
-            color: #ffffff; /* Text color */
-            background-color: #00796b; /* Button color */
+            color: #333; /* Text color for button */
+            background-color: #b0bec5; /* Button color changed to grey */
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
         }
         .enter-vr-btn:hover {
-            background-color: #004d40; /* Darker button color on hover */
+            background-color: #90a4ae; /* Darker grey on hover */
         }
     </style>
 </head>
@@ -45,6 +45,21 @@
     <h1>Welcome to the VR Architectural Walkthrough!</h1>
     <p>Experience a virtual tour with WebXR technology.</p>
     <a href="#" class="enter-vr-btn">Enter VR</a>
+
+    <!-- A-Frame Scene -->
+    <a-scene>
+        <!-- Skybox using a single image -->
+        <a-sky src="#skybox-image" rotation="0 -90 0"></a-sky>
+        
+        <!-- Add other 3D content here -->
+
+    </a-scene>
+
+    <!-- Skybox image -->
+    <a-assets>
+        <img id="skybox-image" src="assets/skybox-image.jpg">
+    </a-assets>
+
     <script src="./libs/fas.js"></script>
     <script type="module">
         import { App } from './app.js';
