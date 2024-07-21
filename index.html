@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>VR Architectural Walkthrough with WebXR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
@@ -17,124 +16,27 @@
         body {
             margin: 0;
             padding: 0;
+            background-color: #f0f0f0; /* Change the background color here */
+            font-family: Arial, sans-serif; /* Add a font-family for better text appearance */
+            color: #333; /* Change text color */
+            text-align: center; /* Center text alignment */
+            padding-top: 50px; /* Add some space from the top */
         }
-        a-scene {
-            width: 100vw;
-            height: 100vh;
-            display: block;
+        h1 {
+            font-size: 2em; /* Increase the font size for headings */
         }
     </style>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
-    <script>
-        AFRAME.registerComponent('teleport', {
-            init: function () {
-                this.el.setAttribute('teleport-controls', {
-                    startEvents: 'mousedown',
-                    endEvents: 'mouseup',
-                    cameraRig: '#cameraRig',
-                    teleportOrigin: '#camera'
-                });
-            }
-        });
-
-        AFRAME.registerComponent('interactable', {
-            init: function () {
-                this.el.addEventListener('click', function () {
-                    alert('Object Clicked!');
-                });
-            }
-        });
-
-        // Custom draggable component
-        AFRAME.registerComponent('draggable', {
-            init: function () {
-                this.el.addEventListener('mousedown', (event) => {
-                    this.dragging = true;
-                    this.previousMousePosition = event.detail.intersection.point;
-                });
-
-                this.el.sceneEl.addEventListener('mousemove', (event) => {
-                    if (this.dragging) {
-                        const newPosition = event.detail.intersection.point;
-                        const deltaX = newPosition.x - this.previousMousePosition.x;
-                        const deltaY = newPosition.y - this.previousMousePosition.y;
-                        const deltaZ = newPosition.z - this.previousMousePosition.z;
-                        
-                        const currentPosition = this.el.object3D.position;
-                        this.el.object3D.position.set(currentPosition.x + deltaX, currentPosition.y + deltaY, currentPosition.z + deltaZ);
-                        
-                        this.previousMousePosition = newPosition;
-                    }
-                });
-
-                this.el.addEventListener('mouseup', () => {
-                    this.dragging = false;
-                });
-            }
-        });
-
-        // Ensure skybox persists
-        AFRAME.registerSystem('persistentSkybox', {
-            init: function () {
-                const skybox = document.querySelector('a-sky');
-                if (skybox) {
-                    skybox.addEventListener('loaded', () => {
-                        this.skybox = skybox;
-                    });
-                }
-            },
-
-            tick: function () {
-                if (this.skybox) {
-                    // Ensure skybox is rendered properly
-                    this.skybox.setAttribute('visible', true);
-                }
-            }
-        });
-    </script>
 </head>
 <body>
+    <h1>Welcome to the VR Architectural Walkthrough!</h1>
+    <p>Experience a virtual tour with WebXR technology.</p>
     <script src="./libs/fas.js"></script>
     <script type="module">
         import { App } from './app.js';
         
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function(){
             const app = new App();
             window.app = app;
-            
-            // Create and append the A-Frame scene dynamically
-            const scene = document.createElement('a-scene');
-            
-            // Add the skybox
-            const sky = document.createElement('a-sky');
-            sky.setAttribute('src', 'assets/skybox.jpg');
-            sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
-            scene.appendChild(sky);
-            
-            // Add a draggable sphere for debugging with smaller size
-            const sphere = document.createElement('a-sphere');
-            sphere.setAttribute('position', '0 1.25 -3');
-            sphere.setAttribute('radius', '0.5'); // Smaller radius
-            sphere.setAttribute('color', '#FF0000');
-            sphere.setAttribute('draggable', ''); // Make sphere draggable
-            scene.appendChild(sphere);
-            
-            // Add the camera rig with teleportation controls
-            const cameraRig = document.createElement('a-entity');
-            cameraRig.setAttribute('id', 'cameraRig');
-            
-            const camera = document.createElement('a-camera');
-            camera.setAttribute('id', 'camera');
-            cameraRig.appendChild(camera);
-            
-            const teleportEntity = document.createElement('a-entity');
-            teleportEntity.setAttribute('teleport', '');
-            cameraRig.appendChild(teleportEntity);
-            
-            scene.appendChild(cameraRig);
-            
-            document.body.appendChild(scene);
         });
     </script>
 </body>
