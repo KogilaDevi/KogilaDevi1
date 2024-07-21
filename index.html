@@ -105,6 +105,7 @@
             const sky = document.createElement('a-sky');
             sky.setAttribute('src', 'assets/skybox.jpg');
             sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
+            sky.setAttribute('visible', true); // Set visible to true by default
             sky.setAttribute('skybox-loader', ''); // Ensure skybox loader is attached
             scene.appendChild(sky);
             
@@ -116,17 +117,21 @@
             sphere.setAttribute('draggable', ''); // Make sphere draggable
             scene.appendChild(sphere);
             
-            // Add the camera rig with teleportation controls
+            // Add the camera rig with teleportation
             const cameraRig = document.createElement('a-entity');
             cameraRig.setAttribute('id', 'cameraRig');
+            cameraRig.setAttribute('position', '0 1.6 0');
+            cameraRig.setAttribute('rotation', '0 0 0');
             
             const camera = document.createElement('a-camera');
             camera.setAttribute('id', 'camera');
+            camera.setAttribute('near', '0.1');
+            camera.setAttribute('far', '10000');
             cameraRig.appendChild(camera);
             
-            const teleportEntity = document.createElement('a-entity');
-            teleportEntity.setAttribute('teleport', '');
-            cameraRig.appendChild(teleportEntity);
+            const teleportControls = document.createElement('a-entity');
+            teleportControls.setAttribute('teleport', '');
+            cameraRig.appendChild(teleportControls);
             
             scene.appendChild(cameraRig);
             
@@ -135,5 +140,3 @@
     </script>
 </body>
 </html>
-
-
