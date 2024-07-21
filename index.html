@@ -2,8 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>VR Skybox Drag</title>
+    <title>VR Architectural Walkthrough with WebXR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon" sizes="180x180" href="./css/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./css/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./css/favicon/favicon-16x16.png">
+    <link rel="manifest" href="./css/favicon/site.webmanifest">
+    <link rel="mask-icon" href="./css/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <!-- end favicon -->
+    <link type="text/css" rel="stylesheet" href="./css/common.css">
     <style>
         body {
             margin: 0;
@@ -16,49 +25,118 @@
         }
     </style>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-</head>
-<body>
-    <a-scene>
-        <!-- Skybox -->
-        <a-sky id="dynamic-skybox" src="assets/skybox.jpg" rotation="0 0 0"></a-sky>
-
-        <!-- Camera and Controls -->
-        <a-entity camera look-controls>
-            <a-cursor></a-cursor>
-        </a-entity>
-    </a-scene>
-
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
     <script>
-        let dragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
-
-        document.addEventListener('mousedown', function(event) {
-            dragging = true;
-            previousMousePosition = { x: event.clientX, y: event.clientY };
-        });
-
-        document.addEventListener('mousemove', function(event) {
-            if (dragging) {
-                const skybox = document.querySelector('#dynamic-skybox');
-
-                const deltaX = (event.clientX - previousMousePosition.x) / window.innerWidth * 360;
-                const deltaY = (event.clientY - previousMousePosition.y) / window.innerHeight * 180;
-
-                let currentRotation = skybox.getAttribute('rotation');
-                const newRotation = {
-                    x: currentRotation.x - deltaY,
-                    y: currentRotation.y + deltaX,
-                    z: currentRotation.z
-                };
-
-                skybox.setAttribute('rotation', newRotation);
-                previousMousePosition = { x: event.clientX, y: event.clientY };
+        AFRAME.registerComponent('teleport', {
+            init: function () {
+                this.el.setAttribute('teleport-controls', {
+                    startEvents: 'mousedown',
+                    endEvents: 'mouseup',
+                    cameraRig: '#cameraRig',
+                    teleportOrigin: '#camera'
+                });
             }
         });
 
-        document.addEventListener('mouseup', function() {
-            dragging = false;
+        AFRAME.registerComponent('interactable', {
+            init: function () {
+                this.el.addEventListener('click', function () {
+                    alert('Object Clicked!');
+                });
+            }
+        });
+
+        // Custom draggable component
+        AFRAME.registerComponent('draggable', {
+            init: function () {
+                this.el.addEventListener('mousedown', (event) => {
+                    this.dragging = true;
+                    this.previousMousePosition = event.detail.intersection.point;
+                });
+
+                this.el.sceneEl.addEventListener('mousemove', (event) => {
+                    if (this.dragging) {
+                        const newPosition = event.detail.intersection.point;
+                        const deltaX = newPosition.x - this.previousMousePosition.x;
+                        const deltaY = newPosition.y - this.previousMousePosition.y;
+                        const deltaZ = newPosition.z - this.previousMousePosition.z;
+                        
+                        const currentPosition = this.el.object3D.position;
+                        this.el.object3D.position.set(currentPosition.x + deltaX, currentPosition.y + deltaY, currentPosition.z + deltaZ);
+                        
+                        this.previousMousePosition = newPosition;
+                    }
+                });
+
+                this.el.addEventListener('mouseup', () => {
+                    this.dragging = false;
+                });
+            }
+        });
+
+        // Ensure skybox persists
+        AFRAME.registerSystem('persistentSkybox', {
+            init: function () {
+                const skybox = document.querySelector('a-sky');
+                if (skybox) {
+                    skybox.addEventListener('loaded', () => {
+                        this.skybox = skybox;
+                    });
+                }
+            },
+
+            tick: function () {
+                if (this.skybox) {
+                    // Ensure skybox is rendered properly
+                    this.skybox.setAttribute('visible', true);
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <script src="./libs/fas.js"></script>
+    <script type="module">
+        import { App } from './app.js';
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const app = new App();
+            window.app = app;
+            
+            // Create and append the A-Frame scene dynamically
+            const scene = document.createElement('a-scene');
+            
+            // Add the skybox
+            const sky = document.createElement('a-sky');
+            sky.setAttribute('src', 'assets/skybox.jpg');
+            sky.setAttribute('rotation', '0 -90 0'); // Rotate sky if necessary
+            scene.appendChild(sky);
+            
+            // Add a draggable sphere for debugging with smaller size
+            const sphere = document.createElement('a-sphere');
+            sphere.setAttribute('position', '0 1.25 -3');
+            sphere.setAttribute('radius', '0.5'); // Smaller radius
+            sphere.setAttribute('color', '#FF0000');
+            sphere.setAttribute('draggable', ''); // Make sphere draggable
+            scene.appendChild(sphere);
+            
+            // Add the camera rig with teleportation controls
+            const cameraRig = document.createElement('a-entity');
+            cameraRig.setAttribute('id', 'cameraRig');
+            
+            const camera = document.createElement('a-camera');
+            camera.setAttribute('id', 'camera');
+            cameraRig.appendChild(camera);
+            
+            const teleportEntity = document.createElement('a-entity');
+            teleportEntity.setAttribute('teleport', '');
+            cameraRig.appendChild(teleportEntity);
+            
+            scene.appendChild(cameraRig);
+            
+            document.body.appendChild(scene);
         });
     </script>
 </body>
 </html>
+
