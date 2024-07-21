@@ -16,20 +16,35 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0; /* Change the background color here */
-            font-family: Arial, sans-serif; /* Add a font-family for better text appearance */
-            color: #333; /* Change text color */
-            text-align: center; /* Center text alignment */
-            padding-top: 50px; /* Add some space from the top */
+            background-color: #e0f7fa; /* Change background color here */
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            padding-top: 50px;
         }
         h1 {
-            font-size: 2em; /* Increase the font size for headings */
+            font-size: 2em;
+        }
+        .enter-vr-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #ffffff; /* Text color */
+            background-color: #00796b; /* Button color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .enter-vr-btn:hover {
+            background-color: #004d40; /* Darker button color on hover */
         }
     </style>
 </head>
 <body>
     <h1>Welcome to the VR Architectural Walkthrough!</h1>
     <p>Experience a virtual tour with WebXR technology.</p>
+    <a href="#" class="enter-vr-btn">Enter VR</a>
     <script src="./libs/fas.js"></script>
     <script type="module">
         import { App } from './app.js';
@@ -41,3 +56,4 @@
     </script>
 </body>
 </html>
+
